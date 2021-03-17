@@ -23,6 +23,7 @@ namespace MyServer
             serverStart.center=new HandlerCenter();
             serverStart.Start(6650);
             Console.WriteLine("服务器已启动");
+            Console.WriteLine("hello");
             SkillInitialProperty skillInitialProperty=new SkillInitialProperty();//初始化技能列表
             InventoryInItialProperty inventoryInItialProperty=new InventoryInItialProperty();//初始化物品列表
             while (true)
