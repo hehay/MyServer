@@ -20,6 +20,8 @@ namespace MyServer.cache.accaount
         /// </summary>
         /// <returns></returns>
         bool MatchAccaount(string account,string password);
+
+        bool ModifyPassword(string account,string password);
         /// <summary>
         /// 是否在线
         /// </summary>

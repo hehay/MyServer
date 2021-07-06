@@ -12,5 +12,8 @@ namespace Protocols
 
        public const int Reg_CREQ = 3;
        public const int Reg_SRES = 4;
+
+        public const int Modify_CREQ = 5;
+        public const int Modify_SRES = 6;
    }
 }

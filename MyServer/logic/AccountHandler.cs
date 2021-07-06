@@ -37,6 +37,9 @@ namespace MyServer.logic
                 case AccountProtocol.Reg_CREQ:
                     Creat(token,message.GetMessage<AccountDTO>());
                     break;
+                case AccountProtocol.Modify_CREQ:
+                    Modify(token,message.GetMessage<AccountDTO>());
+                    break;
             }
         }
 
@@ -61,7 +64,18 @@ namespace MyServer.logic
                 Write(token, AccountProtocol.Reg_SRES, returnNum);
             });
         }
-
+        void Modify(UserToken token,AccountDTO dto) 
+        {
+            ExecutorPool.Instance.Executor(delegate 
+            {
+                int returnNum = accaount.Modify(token, dto.account, dto.password);
+                Write(token,AccountProtocol.Reg_SRES ,returnNum);
+            
+            }
+                
+                
+                );
+        }
         public override byte GetType()
         {
             return Protocol.Accaount;

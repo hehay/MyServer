@@ -45,6 +45,15 @@ namespace MyServer.cache.accaount
             }
             return false;
         }
+        public bool ModifyPassword(string account,string password)
+        {
+            if (HasAccaount(account)) 
+            {
+                NameAndAccount[account].Password = password;
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// 账号是否在线
         /// </summary>
