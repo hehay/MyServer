@@ -69,7 +69,7 @@ namespace MyServer.logic
             ExecutorPool.Instance.Executor(delegate 
             {
                 int returnNum = accaount.Modify(token, dto.account, dto.password);
-                Write(token,AccountProtocol.Reg_SRES ,returnNum);
+                Write(token,AccountProtocol.Modify_SRES ,returnNum);
             
             }
                 

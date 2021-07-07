@@ -51,6 +51,8 @@ namespace MyServer.cache.accaount
             {
                 NameAndAccount[account].Password = password;
                 return true;
+
+
             }
             return false;
         }
