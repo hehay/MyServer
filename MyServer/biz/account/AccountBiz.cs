@@ -39,13 +39,10 @@ namespace MyServer.biz.accaount
 
             accountCache.OnLine(token,account); return 1;//登录成功
         }
-        public int Modify(NetFrame.UserToken token, string account, string password) 
+        public int Modify(NetFrame.UserToken token, string account, string oldPassword,string newPassword) 
         {
-            if (account.Length < 3 || password.Length < 3) return -1;//账号密码格式错误
-            if (!accountCache.HasAccaount(account)) return -2;//没有此账号
-            if (!accountCache.ModifyPassword(account, password)) return -3;//修改失败
-            return 1;//密码修改成功
-        
+            if (account.Length < 3 || oldPassword.Length < 3||newPassword.Length<3) return -3;//账号密码格式错误
+            return accountCache.ModifyPassword(account,oldPassword,newPassword);
         }
         public void Close(NetFrame.UserToken token)
         {

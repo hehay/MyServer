@@ -45,16 +45,22 @@ namespace MyServer.cache.accaount
             }
             return false;
         }
-        public bool ModifyPassword(string account,string password)
+        public int ModifyPassword(string account,string oldPassword,string newPassword)
         {
+
             if (HasAccaount(account)) 
             {
-                NameAndAccount[account].Password = password;
-                return true;
-
-
+                if (NameAndAccount[account].Password != oldPassword)
+                {
+                    return -2;//旧密码错误
+                }
+                else 
+                {
+                    NameAndAccount[account].Password = newPassword;
+                    return 1;//修改成功
+                }
             }
-            return false;
+            return -1;//无此账号
         }
         /// <summary>
         /// 账号是否在线

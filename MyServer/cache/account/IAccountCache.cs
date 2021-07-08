@@ -21,7 +21,7 @@ namespace MyServer.cache.accaount
         /// <returns></returns>
         bool MatchAccaount(string account,string password);
 
-        bool ModifyPassword(string account,string password);
+        int ModifyPassword(string account,string oldPassword,string newPassword);
         /// <summary>
         /// 是否在线
         /// </summary>

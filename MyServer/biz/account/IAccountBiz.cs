@@ -26,7 +26,7 @@ namespace MyServer.biz.accaount
         /// <returns></returns>
         int Login(UserToken token, string account, string password);
 
-        int Modify(UserToken token, string account, string password);
+        int Modify(UserToken token, string account, string oldPassword,string newPassword);
         /// <summary>
         /// 用户断开
         /// </summary>

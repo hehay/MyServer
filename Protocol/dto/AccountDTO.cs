@@ -10,4 +10,12 @@ namespace Protocols.dto
         public string account;
         public string password;
     }
+    [Serializable]
+    public class ModifyDTO
+    {
+        public string account;
+        public string oldPassword;
+        public string newPassword;
+    }
+
 }

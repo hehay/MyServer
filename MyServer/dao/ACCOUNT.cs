@@ -30,4 +30,34 @@ namespace MyServer.dao
            get { return password; }
        }
    }
+   /* public class MODIFY
+    {
+
+        private int id;
+        private string account;
+        private string oldPassword;
+        private string newPassword;
+
+        public int Id
+        {
+            set { id = value; }
+            get { return id; }
+        }
+        public string Account
+        {
+            set { account = value; }
+            get { return account; }
+        }
+
+        public string OldPassword
+        {
+            set { oldPassword = value; }
+            get { return oldPassword; }
+        }
+        public string NewPassword
+        {
+            set { newPassword = value; }
+            get { return newPassword; }
+        }
+    }*/
 }
