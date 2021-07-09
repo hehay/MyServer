@@ -5,9 +5,11 @@ using System.Text;
 namespace Protocols.dto
 {
     [Serializable]
-    public class AccountDTO
+    public class ModifyDTO
     {
         public string account;
-        public string password;
+        public string oldPassword;
+        public string newPassword;
     }
+
 }

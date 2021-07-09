@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dto\AbsRoleModel.cs" />
+    <Compile Include="dto\ModifyDTO.cs" />
     <Compile Include="dto\AccountDTO.cs" />
     <Compile Include="dto\AttackDTO.cs" />
     <Compile Include="dto\DamageDTO.cs" />

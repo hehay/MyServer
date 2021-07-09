@@ -16,12 +16,14 @@ namespace MyServer.cache.accaount
         public int index=1;
         public Dictionary<UserToken,string> OnLineDictionary=new Dictionary<UserToken, string>(); 
         public Dictionary<string,ACCOUNT> NameAndAccount=new Dictionary<string, ACCOUNT>();
-        private XmlDocument AccountDoc = new XmlDocument();
+        private XmlDocument accountDoc = new XmlDocument();
         private string _path;
+        
         public AccountCache(string path) 
         {
             _path = path;
-            ReadAccountFile(path);
+            ReadAccountFile();
+            
         }
         public bool HasAccaount(string accaount)
         {
@@ -57,6 +59,7 @@ namespace MyServer.cache.accaount
                 else 
                 {
                     NameAndAccount[account].Password = newPassword;
+                    ModifyAccountToFile(NameAndAccount[account]);
                     return 1;//修改成功
                 }
             }
@@ -104,29 +107,37 @@ namespace MyServer.cache.accaount
         /// </summary>
         /// <param name="accaount"></param>
         /// <param name="password"></param>
-        public void AddAccaount(string account, string password)
+        public void CreateAccount(string account, string password)
         {
+            index++;
             //创建账号实体并进行绑定
             ACCOUNT model = new ACCOUNT();
             model.Account = account;
-            model.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
+            //model.Password = Convert.ToBase64String(Encoding.UTF8.GetBytes(password));
+            model.Password = password;
             model.Id = index;
             NameAndAccount.Add(account, model);
-            XmlNode node = AccountDoc.SelectSingleNode("Root");
-            XmlElement element = AccountDoc.CreateElement("Account");
+            
+            //将新用户的信息保存到文件
+            AddAccountToFile(account,password);
+            
+        }
+        public void AddAccountToFile(string account,string password)
+        {
+            XmlNode node = accountDoc.SelectSingleNode("Root");
+            XmlElement element = accountDoc.CreateElement("Account");
             element.SetAttribute("id", index.ToString());
             element.SetAttribute("账号", account);
             element.SetAttribute("密码", password);
             node.AppendChild(element);
-            AccountDoc.Save(_path);
-            index++;
+            accountDoc.Save(_path);
         }
-        public void ReadAccountFile(string path)
+        public void ReadAccountFile()
         {
-            if (!File.Exists(path))
+            if (!File.Exists(_path))
             {
-                XmlElement root = AccountDoc.CreateElement("Root");
-                AccountDoc.AppendChild(root);
+                XmlElement root = accountDoc.CreateElement("Root");
+                accountDoc.AppendChild(root);
                 //XmlElement account = AccountDoc.CreateElement("Account");
                 //account.SetAttribute("id", "001");
                 //account.SetAttribute("账号", "0001");
@@ -137,11 +148,11 @@ namespace MyServer.cache.accaount
                 //account1.SetAttribute("账号", "0002");
                 //account1.SetAttribute("密码", "1234");
                 //root.AppendChild(account1);
-                AccountDoc.Save(path);
+                accountDoc.Save(_path);
 
             }
-            AccountDoc.Load(path);
-            XmlNodeList nodeList = AccountDoc.SelectSingleNode("Root").ChildNodes;
+            accountDoc.Load(_path);
+            XmlNodeList nodeList = accountDoc.SelectSingleNode("Root").ChildNodes;
             foreach (XmlElement node in nodeList)
             {
                 ACCOUNT account = new ACCOUNT();
@@ -150,34 +161,36 @@ namespace MyServer.cache.accaount
                 account.Password = node.GetAttribute("密码");
                 NameAndAccount.Add(account.Account, account);
             }
+            index = nodeList.Count;
         }
         public void WriteAccountFile()
         {
-            AccountDoc.RemoveAll();
-            XmlElement root = AccountDoc.CreateElement("Root");
-            AccountDoc.AppendChild(root);
+            accountDoc.RemoveAll();
+            XmlElement root = accountDoc.CreateElement("Root");
+            accountDoc.AppendChild(root);
             foreach (var a in NameAndAccount.Values)
             {
-                XmlElement account = AccountDoc.CreateElement("Account");
+                XmlElement account = accountDoc.CreateElement("Account");
                 account.SetAttribute("id", a.Id.ToString());
                 account.SetAttribute("账号", a.Account);
                 account.SetAttribute("密码", a.Password);
                 root.AppendChild(account);
             }
-            AccountDoc.Save(_path);
+            accountDoc.Save(_path);
 
         }
-        public void ModifyAccountToFile(ACCOUNT a)
+        public void ModifyAccountToFile(ACCOUNT account)
         {
-            XmlNodeList nodeList = AccountDoc.SelectSingleNode("Root").ChildNodes;
+            XmlNodeList nodeList = accountDoc.SelectSingleNode("Root").ChildNodes;
             foreach (XmlElement element in nodeList)
             {
-                if (element.GetAttribute("账号") == a.Account)
+                if (element.GetAttribute("账号") == account.Account)
                 {
-                    element.SetAttribute("密码", a.Password);
+                    element.SetAttribute("密码", account.Password);
                 }
             }
-            AccountDoc.Save(_path);
+            accountDoc.Save(_path);
         }
+
     }
 }

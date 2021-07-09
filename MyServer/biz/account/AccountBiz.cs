@@ -24,7 +24,7 @@ namespace MyServer.biz.accaount
             
             if (accountCache.HasAccaount(account)) return -2;//已有此账号
 
-            accountCache.AddAccaount(account,password); return 1;//创建成功
+            accountCache.CreateAccount(account,password); return 1;//创建成功
         }
 
         public int Login(NetFrame.UserToken token, string account, string password)

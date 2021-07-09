@@ -13,7 +13,7 @@ namespace MyServer.cache
 {
   public class cacheFactory
   {
-      private static Dictionary<string, string> NameAndPath = new Dictionary<string, string>();
+      //private static Dictionary<string, string> NameAndPath = new Dictionary<string, string>();
       public static readonly IAccountCache AccaountCache;
       public static readonly IUserCache UserCache;
       public static readonly IPosCache PosCache;
@@ -22,9 +22,9 @@ namespace MyServer.cache
       private static string _path = "F:/CurDesign/MyServer/MyServer/file/";
         static cacheFactory()
       {
-           CreatePath();
+          // CreatePath();
            
-           AccaountCache =new AccountCache(NameAndPath["AccountFile"]);
+           AccaountCache =new AccountCache(_path+ "AccountFile.xml");
            UserCache=new UserCache();
            PosCache=new PosCache();
            SkillCache = new SkillCache();
@@ -33,13 +33,13 @@ namespace MyServer.cache
         //private List<ACCOUNT> AllAccount = new List<ACCOUNT>();
         
         
-      
+      /*
         private static void CreatePath()
         {
             NameAndPath.Add("AccountFile", _path + "AccountFile.xml");
             NameAndPath.Add("SkillFile", _path + "SkillFile.xml");
         }
-    
+    */
         
     }
 }

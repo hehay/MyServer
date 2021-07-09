@@ -49,6 +49,6 @@ namespace MyServer.cache.accaount
         /// </summary>
         /// <param name="account"></param>
         /// <param name="password"></param>
-        void AddAccaount(string account, string password);
+        void CreateAccount(string account, string password);
     }
 }

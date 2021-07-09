@@ -1,4 +1,7 @@
 <Root>
   <Account id="1" 账号="hehay" 密码="1234" />
-  <Account id="1" 账号="12345" 密码="1234" />
+  <Account id="2" 账号="hyde" 密码="1234" />
+  <Account id="3" 账号="CZYY" 密码="12345" />
+  <Account id="4" 账号="cczy" 密码="1234" />
+  <Account id="5" 账号="cyyz" 密码="123456" />
 </Root>
