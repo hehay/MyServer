@@ -5,30 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using MyServer.cache;
 using MyServer.cache.accaount;
+using MyServer.cache.model;
 
 namespace MyServer.biz.accaount
 {
-    public class AccountBiz:IAccountBiz
+    public class ModelBiz:IModelBiz
     {
-        public IModelBiz modelBiz = BizFactory.modelBiz;
-        private IAccountCache accountCache = cacheFactory.AccaountCache;
-        /// <summary>
-        /// 创建账号
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="account"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public int Creat(NetFrame.UserToken token, string account, string password)
+        public IModelCache modelCache = cacheFactory.ModelCache;
+        public IAccountBiz accountBiz = BizFactory.accountBiz;
+       
+        public void CreatModel(int id)
         {
-            if (account.Length < 3 || password.Length < 3) return -1;//账号或密码长度不够返回-1
-            
-            if (accountCache.HasAccaount(account)) return -2;//已有此账号
-            
-            accountCache.CreateAccount(account,password);//先创建账号
-            modelBiz.CreatModel(accountCache.GetAccountId(token));//创建初始化Model
-            return 1;//创建成功
-            
+            modelCache.AddModel(id);
         }
 
         public int Login(NetFrame.UserToken token, string account, string password)

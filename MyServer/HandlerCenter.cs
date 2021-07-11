@@ -19,6 +19,7 @@ namespace MyServer
        private HandlerInterface Pos;
        private HandlerInterface Skill;
        private HandlerInterface Inventory;
+        private HandlerInterface Model;
        public  HandlerCenter()
        {
            Accaount=new AccountHandler();
@@ -27,6 +28,7 @@ namespace MyServer
            Pos=new PosHandler();
            Skill=new skillHandler();
            Inventory=new InventoryHandler();
+           Model=new 
        }
         public override void ClientConnect(UserToken token)
         {
