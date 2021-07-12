@@ -28,7 +28,7 @@ namespace MyServer
            Pos=new PosHandler();
            Skill=new skillHandler();
            Inventory=new InventoryHandler();
-           Model=new 
+            Model = new ModelHandler();
        }
         public override void ClientConnect(UserToken token)
         {

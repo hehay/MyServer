@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using MyServer.cache;
 using MyServer.cache.accaount;
 using MyServer.cache.model;
+using MyServer.dao;
+using NetFrame;
+using Protocols.dto;
 
 namespace MyServer.biz.accaount
 {
@@ -18,32 +21,40 @@ namespace MyServer.biz.accaount
         {
             modelCache.AddModel(id);
         }
-
-        public int Login(NetFrame.UserToken token, string account, string password)
+        public ModelDTO GetDtoFromModel(MODEL model) 
         {
-            if (account.Length < 3 || password.Length < 3) return -1;//账号密码格式错误
+            ModelDTO dto = new ModelDTO();
+            dto.Id = model.Id;
+            dto.Gold = model.Gold;
+            return dto;
 
-            if (!accountCache.HasAccaount(account)) return -2;//没有此账号
 
-            if (!accountCache.MatchAccaount(account, password)) return -3;//密码不匹配
-
-            if (accountCache.IsOnline(account)) return -4 ;//账号已登录
-
-            accountCache.OnLine(token,account); return 1;//登录成功
         }
-        public int Modify(NetFrame.UserToken token, string account, string oldPassword,string newPassword) 
+        
+        public ModelDTO OnLine(UserToken token, int userId)
         {
-            if (account.Length < 3 || oldPassword.Length < 3||newPassword.Length<3) return -3;//账号密码格式错误
-            return accountCache.ModifyPassword(account,oldPassword,newPassword);
-        }
-        public void Close(NetFrame.UserToken token)
-        {
-            accountCache.OffLine(token);
+            int accountId = accountBiz.GetAccountId(token);//获取不到此用户
+            if (accountId == -1) return null;
+            if (modelCache.IsOnline(userId)) return null;//角色已登录
+            MODEL model = modelCache.Online(token, userId);
+            return GetDtoFromModel(model);
         }
 
-        public int GetAccountId(NetFrame.UserToken token)
+        public void OffLine(UserToken token)
         {
-            return accountCache.GetAccountId(token);
+            int accountId = accountBiz.GetAccountId(token);//获取不到此用户
+            if (accountId == -1) return;
+            modelCache.Offline(token, accountId);
         }
+
+        public MODEL GetModelFromDto(ModelDTO dto)
+        {
+            MODEL model = new MODEL();
+            model.Id = dto.Id;
+            model.Gold = dto.Gold;
+            return model;
+        }
+
+        
     }
 }

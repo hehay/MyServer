@@ -53,6 +53,7 @@
     <Compile Include="dto\SkillDTO.cs" />
     <Compile Include="dto\SkillModelDTO.cs" />
     <Compile Include="dto\TalkDTO.cs" />
+    <Compile Include="dto\ModelDTO.cs" />
     <Compile Include="dto\UserDTO.cs" />
     <Compile Include="InventoryProtocol.cs" />
     <Compile Include="MapProtocol.cs" />
