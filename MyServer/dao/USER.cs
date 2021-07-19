@@ -11,6 +11,7 @@ namespace MyServer.dao
         private int id;
         private string skillIds;
         private string equips;
+        private int gold;
         private int level;
         private int exp;
         private string name;
@@ -35,7 +36,11 @@ namespace MyServer.dao
             get { return id; }
             set { id = value; }
         }
-
+        public int Gold 
+        {
+            set { gold = value; }
+            get { return gold; }
+        }
         public int Level
         {
             get { return level; }

@@ -18,7 +18,6 @@ namespace MyServer.biz
         public static readonly IPosBiz PosBiz;
         public static readonly ISkillBiz SkillBiz;
         public static readonly IinventoryBiz inventoryBiz;
-        public static readonly IModelBiz modelBiz;
         static BizFactory()
         {
             accountBiz = new AccountBiz();
@@ -26,7 +25,6 @@ namespace MyServer.biz
             PosBiz=new PosBiz();
             SkillBiz=new SkillBiz();
             inventoryBiz=new InventoryBiz();
-            modelBiz = new ModelBiz();
         }
     }
 }

@@ -30,7 +30,15 @@ namespace MyServer.biz.user
             UserCache.AddRole(accountId, name, modelName);
             return 1;//创建成功
         }
-
+        public UserDTO GetUserDtoByToken(UserToken token)
+        {
+            //USER user= UserCache.GetUserByToken(token);
+            UserDTO dto = new UserDTO 
+            { 
+              gold=10
+            };
+            return dto;
+        }
         public int DelectRole(UserToken token,  int roleId,string name)
         {
             int accountId = AccountBiz.GetAccountId(token);//获取不到此用户

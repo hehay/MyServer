@@ -10,7 +10,6 @@ namespace MyServer.biz.accaount
 {
     public class AccountBiz:IAccountBiz
     {
-        public IModelBiz modelBiz = BizFactory.modelBiz;
         private IAccountCache accountCache = cacheFactory.AccaountCache;
         /// <summary>
         /// 创建账号
@@ -26,7 +25,6 @@ namespace MyServer.biz.accaount
             if (accountCache.HasAccaount(account)) return -2;//已有此账号
             
             accountCache.CreateAccount(account,password);//先创建账号
-            modelBiz.CreatModel(accountCache.GetAccountId(token));//创建初始化Model
             return 1;//创建成功
             
         }

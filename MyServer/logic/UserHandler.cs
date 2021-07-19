@@ -45,6 +45,9 @@ namespace MyServer.logic
                 case UserProtocol.GetRoleList_CREQ:
                     GetRoleList(token);
                     break;
+                case UserProtocol.GetUserDt_CREQ:
+                    GetUserDt(token);
+                    break;
             }
 
         }
@@ -62,8 +65,8 @@ namespace MyServer.logic
         {
             ExecutorPool.Instance.Executor(delegate
             {
-               UserDTO i= UserBiz.OnLine(token,roleId);
-                Write(token,UserProtocol.OnLine_SRES,i);
+               UserDTO userDTO= UserBiz.OnLine(token,roleId);
+                Write(token,UserProtocol.OnLine_SRES,userDTO);
 
             });
         }
@@ -96,6 +99,15 @@ namespace MyServer.logic
         public override byte GetType()
         {
             return Protocol.User;
+        }
+        void GetUserDt(UserToken token)
+        {
+            ExecutorPool.Instance.Executor(delegate 
+            {
+                UserDTO userDto = UserBiz.GetUserDtoByToken(token);
+                Write(token, UserProtocol.GetUserDt_SRES, userDto);
+            
+            });
         }
     }
 }

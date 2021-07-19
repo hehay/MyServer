@@ -45,6 +45,13 @@ namespace MyServer.cache.user
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+       public USER GetUserByToken(UserToken token) 
+        {
+            int id = tokenToId[token];
+            USER user= GetUserById(id);
+            return user;
+        
+        }
        public USER GetUserById(int id)
         {
            if (idToUser.ContainsKey(id))

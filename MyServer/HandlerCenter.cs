@@ -19,7 +19,6 @@ namespace MyServer
        private HandlerInterface Pos;
        private HandlerInterface Skill;
        private HandlerInterface Inventory;
-        private HandlerInterface Model;
        public  HandlerCenter()
        {
            Accaount=new AccountHandler();
@@ -28,7 +27,6 @@ namespace MyServer
            Pos=new PosHandler();
            Skill=new skillHandler();
            Inventory=new InventoryHandler();
-            Model = new ModelHandler();
        }
         public override void ClientConnect(UserToken token)
         {
@@ -42,7 +40,7 @@ namespace MyServer
             SocketModel model = message as SocketModel;
             switch (model.type)
             {
-                case Protocol.Accaount:
+                case Protocol.Account:
                     Accaount.MessageReceive(token,model);
                     break;
                 case Protocol.User:

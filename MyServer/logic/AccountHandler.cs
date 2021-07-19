@@ -77,7 +77,7 @@ namespace MyServer.logic
         }
         public override byte GetType()
         {
-            return Protocol.Accaount;
+            return Protocol.Account;
         }
     }
 }

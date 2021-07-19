@@ -9,6 +9,7 @@ namespace Protocols.dto
     {
 
         public int accountId;
+        public int gold;
         public int exp;
         public int map;
         public int mp;
@@ -18,11 +19,12 @@ namespace Protocols.dto
         public int money;
         public int[] skillids;
         public int[] equips;
-        public UserDTO(int id, int accountId, int level, int exp, string name, int modelName, int map,int attack,int def,int armour,
+        public UserDTO(int id, int accountId,int gold, int level, int exp, string name, int modelName, int map,int attack,int def,int armour,
             int crit,int exemptCrit,int hp,int maxHp,int mp,int maxMp,float speed,int skillPoint,int propertyPoint,int money, int[] skillids,params int[] equips)
         {
             this.id = id;
             this.accountId = accountId;
+            this.gold = gold;
             this.level = level;
             this.exp = exp;
             this.name = name;

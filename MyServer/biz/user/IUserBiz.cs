@@ -44,5 +44,6 @@ namespace MyServer.biz.user
         ///// </summary>
         ///// <param name="token"></param>
         //void GetToken(UserToken token);
+        UserDTO GetUserDtoByToken(UserToken token);
     }
 }
