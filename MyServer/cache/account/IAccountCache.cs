@@ -50,5 +50,6 @@ namespace MyServer.cache.accaount
         /// <param name="account"></param>
         /// <param name="password"></param>
         void CreateAccount(string account, string password);
+        NetFrame.UserToken GetToken(int accountId);
     }
 }

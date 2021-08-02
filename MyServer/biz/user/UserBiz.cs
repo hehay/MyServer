@@ -30,6 +30,23 @@ namespace MyServer.biz.user
             UserCache.AddRole(accountId, name, modelName);
             return 1;//创建成功
         }
+        public void GetMatchPlayer(UserToken token,int model, out List<MatchDTO> players, out List<UserToken> tokens)
+        {
+            int accountId = AccountBiz.GetAccountId(token);
+            players= UserCache.GetMatchPlayer(accountId,model);
+            if (players != null) 
+            {
+                List<UserToken> userTokens = new List<UserToken>();
+                for (int i = 0; i < players.Count; i++)
+                {
+                    UserToken userToken = AccountBiz.GetToken(players[i].accountId);
+                    userTokens.Add(userToken);
+                }
+                tokens = userTokens;
+            }
+            else tokens = null;
+
+        }
         public UserDTO GetUserDtoByToken(UserToken token)
         {
             //USER user= UserCache.GetUserByToken(token);

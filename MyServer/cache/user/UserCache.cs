@@ -22,8 +22,84 @@ namespace MyServer.cache.user
         public Dictionary<int, UserToken> IdToToken = new Dictionary<int, UserToken>();
         public Dictionary<UserToken, int> tokenToId = new Dictionary<UserToken, int>();
         public Dictionary<int,USER> accIdToUser=new Dictionary<int, USER>();
+        public List<List<MatchDTO>> singlePool = new List<List<MatchDTO>>();
+        public List<List<MatchDTO>> multiPool = new List<List<MatchDTO>>();
+        public List<List<MatchDTO>> fivePool = new List<List<MatchDTO>>();
 
+        public List<MatchDTO> GetMatchPlayer(int accountId,int model) 
+        {
+            
+            switch (model) 
+            {
+                case 0:
+                    for (int i = 0; i < singlePool.Count; i++)
+                    {
+                        List<MatchDTO> players = singlePool[i];
+                        for (int j = 0; j < 2; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId== 0) 
+                            {
+                                matchDto.accountId = accountId;
+                                if (j == 1)
+                                {
+                                    return players;
+                                }
+                                else return null;
+                            }
+                        }
+                    }
+                    List<MatchDTO> compose = new List<MatchDTO>();
+                    for (int i = 0; i < 2; i++)
+                    {
+                        MatchDTO matchDto = new MatchDTO
+                        {
+                            accountId = 0,
+                            index = i,
+                            hasConfirm=false
+                 
+                        };
+                        compose.Add(matchDto);
+                    }
+                    compose[0].accountId = accountId;
+                    singlePool.Add(compose);
+                    return null;
+                case 1:
+                    for (int i = 0; i < multiPool.Count; i++)
+                    {
+                        List<MatchDTO> players = multiPool[i];
+                        for (int j = 0; j < 6; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == 0)
+                            {
+                                matchDto.accountId = accountId;
+                                if (j == 5)
+                                {
+                                    return players;
+                                }
+                                else return null;
+                            }
+                        }
+                    }
+                    compose = new List<MatchDTO>();
+                    for (int i = 0; i < 6; i++)
+                    {
+                        MatchDTO matchDto = new MatchDTO
+                        {
+                            accountId = 0,
+                            index = i,
+                            hasConfirm = false
 
+                        };
+                    }
+                    compose[0].accountId = accountId;
+                    multiPool.Add(compose);
+                    return null;
+                default:
+                    return null;
+            }
+        }
         public int GetUserId(UserToken token)
         {
             if(tokenToId.ContainsKey(token))

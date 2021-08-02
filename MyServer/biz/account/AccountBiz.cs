@@ -55,5 +55,9 @@ namespace MyServer.biz.accaount
         {
             return accountCache.GetAccountId(token);
         }
+        public NetFrame.UserToken GetToken(int accountId) 
+        {
+            return accountCache.GetToken(accountId);
+        }
     }
 }

@@ -38,5 +38,6 @@ namespace MyServer.biz.accaount
         /// <param name="token"></param>
         /// <returns></returns>
         int GetAccountId(UserToken token);
+        UserToken GetToken(int accountId);
     }
 }

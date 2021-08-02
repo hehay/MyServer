@@ -45,5 +45,6 @@ namespace MyServer.biz.user
         ///// <param name="token"></param>
         //void GetToken(UserToken token);
         UserDTO GetUserDtoByToken(UserToken token);
+        void GetMatchPlayer(UserToken token, int model,out List<MatchDTO> players,out List<UserToken> tokens);
     }
 }

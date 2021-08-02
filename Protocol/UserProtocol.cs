@@ -19,5 +19,9 @@ namespace Protocols
        public const int OffLine_SRES = 10;
         public const int GetUserDt_CREQ = 11;
         public const int GetUserDt_SRES = 12;
+        public const int Battle_CREQ = 13;
+        public const int Battle_SRES = 14;
+        public const int Match_CREQ = 15;
+        public const int Match_SRES = 16;
    }
 }

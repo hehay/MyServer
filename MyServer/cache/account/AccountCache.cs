@@ -14,10 +14,12 @@ namespace MyServer.cache.accaount
     public class AccountCache:IAccountCache
     {
         public int index=1;
-        public Dictionary<UserToken,string> OnLineDictionary=new Dictionary<UserToken, string>(); 
+        public Dictionary<UserToken,string> OnLineDictionary=new Dictionary<UserToken, string>();
+     
         public Dictionary<string,ACCOUNT> NameAndAccount=new Dictionary<string, ACCOUNT>();
         private XmlDocument accountDoc = new XmlDocument();
         private string _path;
+        
         
         public AccountCache(string path) 
         {
@@ -25,6 +27,7 @@ namespace MyServer.cache.accaount
             ReadAccountFile();
             
         }
+        
         public bool HasAccaount(string accaount)
         {
             return NameAndAccount.ContainsKey(accaount);
@@ -101,6 +104,26 @@ namespace MyServer.cache.accaount
         {
             if (!OnLineDictionary.ContainsKey(token)) return -1;//没有此用户上线获取不到id
             return NameAndAccount[OnLineDictionary[token]].Id;
+        }
+       
+        public NetFrame.UserToken GetToken(int accountId) 
+        {
+            string name = null;
+            foreach (var item in NameAndAccount.Keys)
+            {
+                if (NameAndAccount[item].Id == accountId) 
+                {
+                    name = item;
+                }
+            }
+            foreach (var item in OnLineDictionary.Keys)
+            {
+                if (OnLineDictionary[item] == name) 
+                {
+                    return item;
+                }
+            }
+            return null;
         }
         /// <summary>
         /// 添加账号

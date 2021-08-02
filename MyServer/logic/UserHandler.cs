@@ -48,6 +48,12 @@ namespace MyServer.logic
                 case UserProtocol.GetUserDt_CREQ:
                     GetUserDt(token);
                     break;
+                case UserProtocol.Battle_CREQ:
+                    int model = message.GetMessage<int>();
+                    GetMatchPlayer(token,model);
+                    break;
+                case UserProtocol.Match_CREQ:
+                    break;
             }
 
         }
@@ -60,7 +66,24 @@ namespace MyServer.logic
                 Write(token,UserProtocol.CreateRole_SRES,i);
             });
         }
-
+        void GetMatchPlayer(UserToken token,int model) 
+        {
+            ExecutorPool.Instance.Executor(delegate 
+            {
+                List<MatchDTO> players = new List<MatchDTO>();
+                List<UserToken> tokens = new List<UserToken>();
+                UserBiz.GetMatchPlayer(token, model,out players,out tokens);
+                if (players != null) 
+                {
+                    for (int i = 0; i < tokens.Count; i++)
+                    {
+                        Write(tokens[i], UserProtocol.Battle_SRES, players);
+                    }
+                    
+                }
+            });
+           
+        }
         void OnLine(UserToken token,int roleId)
         {
             ExecutorPool.Instance.Executor(delegate
