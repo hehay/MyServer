@@ -48,16 +48,34 @@ namespace MyServer.logic
                 case UserProtocol.GetUserDt_CREQ:
                     GetUserDt(token);
                     break;
-                case UserProtocol.Battle_CREQ:
+                case UserProtocol.StartMatch_CREQ:
                     int model = message.GetMessage<int>();
                     GetMatchPlayer(token,model);
                     break;
-                case UserProtocol.Match_CREQ:
+                case UserProtocol.StopMatch_CREQ:
+                    model = message.GetMessage<int>();
+                    StopMatchPlayer(token,model);
+                    break;
+                case UserProtocol.MatchConfirm_CREQ:
+                    model = message.GetMessage<int>();
+                    MatchConfirm(token,model);
                     break;
             }
 
         }
-
+        void MatchConfirm(UserToken token, int model) 
+        {
+            ExecutorPool.Instance.Executor(delegate
+            {
+                int confirmCount = 0;
+                List<UserToken> tokens = new List<UserToken>();
+                UserBiz.MatchConfirm(token, model, out confirmCount, out tokens);
+                for (int i = 0; i < tokens.Count; i++)
+                {
+                    Write(tokens[i], UserProtocol.MatchConfirm_SRES, confirmCount);
+                }
+            });
+        }
         void CreateRole(NetFrame.UserToken token,string name,int modelName )
         {
             ExecutorPool.Instance.Executor(delegate
@@ -77,12 +95,16 @@ namespace MyServer.logic
                 {
                     for (int i = 0; i < tokens.Count; i++)
                     {
-                        Write(tokens[i], UserProtocol.Battle_SRES, players);
+                        Write(tokens[i], UserProtocol.StartMatch_SRES, 1);
                     }
                     
                 }
             });
            
+        }
+        void StopMatchPlayer(UserToken token,int model) 
+        {
+            UserBiz.StopMatchPlayer(token,model);
         }
         void OnLine(UserToken token,int roleId)
         {

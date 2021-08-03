@@ -38,6 +38,11 @@ namespace MyServer.cache.user
                         for (int j = 0; j < 2; j++)
                         {
                             MatchDTO matchDto = players[j];
+                            if (matchDto.accountId==accountId) 
+                            {
+                                return null;
+                                //断线重连todo
+                            }
                             if (matchDto.accountId== 0) 
                             {
                                 matchDto.accountId = accountId;
@@ -99,6 +104,86 @@ namespace MyServer.cache.user
                 default:
                     return null;
             }
+        }
+        public List<MatchDTO> MatchConfirm(int accountId, int model) 
+        {
+            switch (model)
+            {
+                case 0:
+                    for (int i = 0; i < singlePool.Count; i++)
+                    {
+                        List<MatchDTO> players = singlePool[i];
+                        for (int j = 0; j < 2; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                matchDto.hasConfirm = true;
+                                return players;
+                            }
+                        }
+                    }
+                    return null;
+                case 1:
+                    for (int i = 0; i < multiPool.Count; i++)
+                    {
+                        List<MatchDTO> players = multiPool[i];
+                        for (int j = 0; j < 6; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                matchDto.hasConfirm = true;
+                                return players;
+                            }
+                        }
+                    }
+                    return null;
+                default:
+                    return null;
+            }
+
+        }
+        public void StopMatchPlayer(int accountId,int model) 
+        {
+            switch (model)
+            {
+                case 0:
+                    for (int i = 0; i < singlePool.Count; i++)
+                    {
+                        List<MatchDTO> players = singlePool[i];
+                        for (int j = 0; j < 2; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                matchDto.accountId = 0;
+                                matchDto.hasConfirm = false;
+                                return;
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int i = 0; i < multiPool.Count; i++)
+                    {
+                        List<MatchDTO> players = multiPool[i];
+                        for (int j = 0; j < 6; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                matchDto.accountId = 0;
+                                matchDto.hasConfirm = false;
+                                return;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
         public int GetUserId(UserToken token)
         {

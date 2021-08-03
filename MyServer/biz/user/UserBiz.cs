@@ -47,6 +47,34 @@ namespace MyServer.biz.user
             else tokens = null;
 
         }
+        public void MatchConfirm(UserToken token, int model, out int confirmCount, out List<UserToken> tokens) 
+        {
+            int accountId = AccountBiz.GetAccountId(token);
+            List<MatchDTO> players = UserCache.MatchConfirm(accountId, model);
+            int count = 0;
+            if (players != null)
+            {
+                List<UserToken> userTokens = new List<UserToken>();
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (players[i].hasConfirm) count++;
+                    UserToken userToken = AccountBiz.GetToken(players[i].accountId);
+                    userTokens.Add(userToken);
+                }
+                tokens = userTokens;
+                confirmCount = count;
+            }
+            else
+            {
+                tokens = null;
+                confirmCount = count;
+            } 
+        }
+        public void StopMatchPlayer(UserToken token,int model)
+        {
+            int accountId = AccountBiz.GetAccountId(token);
+            UserCache.StopMatchPlayer(accountId,model);
+        }
         public UserDTO GetUserDtoByToken(UserToken token)
         {
             //USER user= UserCache.GetUserByToken(token);

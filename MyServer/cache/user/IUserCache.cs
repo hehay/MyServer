@@ -68,5 +68,7 @@ namespace MyServer.cache.user
        UserToken GeTokenById(int id);
        USER GetUserByToken(UserToken token);
        List<MatchDTO> GetMatchPlayer(int accountId, int model);
+        List<MatchDTO> MatchConfirm(int accountId, int model);
+        void StopMatchPlayer(int accountId,int model);
    }
 }
