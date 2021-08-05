@@ -63,6 +63,7 @@
     <Compile Include="cache\skill\SkillCache.cs" />
     <Compile Include="cache\user\IUserCache.cs" />
     <Compile Include="cache\user\UserCache.cs" />
+    <Compile Include="dao\HERO.cs" />
     <Compile Include="dao\ACCOUNT.cs" />
     <Compile Include="dao\INVENTORY.cs" />
     <Compile Include="dao\POS.cs" />

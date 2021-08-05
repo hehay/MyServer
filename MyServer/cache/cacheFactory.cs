@@ -11,7 +11,7 @@ using MyServer.cache.user;
 
 namespace MyServer.cache
 {
-  public class cacheFactory
+    public class cacheFactory
   {
       //private static Dictionary<string, string> NameAndPath = new Dictionary<string, string>();
       public static readonly IAccountCache AccaountCache;
@@ -25,7 +25,7 @@ namespace MyServer.cache
           // CreatePath();
            
            AccaountCache =new AccountCache(_path+ "AccountFile.xml");
-           UserCache=new UserCache();
+           UserCache=new UserCache(_path+"HeroFile.xml");
            PosCache=new PosCache();
            SkillCache = new SkillCache();
            InventoryCache=new InventoryCache();

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using MyServer.dao;
 using MyServer.tool;
 using NetFrame;
@@ -25,7 +27,63 @@ namespace MyServer.cache.user
         public List<List<MatchDTO>> singlePool = new List<List<MatchDTO>>();
         public List<List<MatchDTO>> multiPool = new List<List<MatchDTO>>();
         public List<List<MatchDTO>> fivePool = new List<List<MatchDTO>>();
+        public List<HERO> heros = new List<HERO>();
 
+        private string _path;
+        private XmlDocument heroFile=new XmlDocument();
+
+        public UserCache(string path) 
+        {
+            _path = path;
+            ReadHeroFile();
+        }
+        public void ReadHeroFile()
+        {
+            if (!File.Exists(_path))
+            {
+                XmlElement root = heroFile.CreateElement("Root");
+                heroFile.AppendChild(root);
+                XmlElement hero1 = heroFile.CreateElement("Hero");
+                hero1.SetAttribute("HeroId", "100");
+                hero1.SetAttribute("HeroName", "Ake");
+                hero1.SetAttribute("第一职业", "刺客");
+                hero1.SetAttribute("第二职业","");
+                //account.SetAttribute("密码", "1234");
+                root.AppendChild(hero1);
+                //XmlElement account1 = AccountDoc.CreateElement("Account");
+                //account1.SetAttribute("id", "002");
+                //account1.SetAttribute("账号", "0002");
+                //account1.SetAttribute("密码", "1234");
+                //root.AppendChild(account1);
+                heroFile.Save(_path);
+
+            }
+            heroFile.Load(_path);
+            XmlNodeList nodeList = heroFile.SelectSingleNode("Root").ChildNodes;
+            foreach (XmlElement node in nodeList)
+            {
+                HERO hero = new HERO();
+                hero.HeroId = int.Parse(node.GetAttribute("HeroId"));
+                hero.HeroName = node.GetAttribute("HeroName");
+                hero.FirstOccupation = node.GetAttribute("第一职业");
+                hero.SecondOccupation = node.GetAttribute("第二职业");
+                heros.Add(hero);
+            }
+        }
+        public void WriteHeroFile()
+        {
+            heroFile.RemoveAll();
+            XmlElement root = heroFile.CreateElement("Root");
+            heroFile.AppendChild(root);
+            foreach (var a in heros)
+            {
+                XmlElement hero = heroFile.CreateElement("Hero");
+                hero.SetAttribute("HeroId", a.HeroId.ToString());
+                hero.SetAttribute("HeroName", a.HeroName);
+                root.AppendChild(hero);
+            }
+            heroFile.Save(_path);
+        }
         public List<MatchDTO> GetMatchPlayer(int accountId,int model) 
         {
             
@@ -104,6 +162,94 @@ namespace MyServer.cache.user
                 default:
                     return null;
             }
+        }
+        public List<MatchDTO> GetCompose(int accountId,int model)
+        {
+            switch (model)
+            {
+                case 0:
+                    for (int i = 0; i < singlePool.Count; i++)
+                    {
+                        List<MatchDTO> players = singlePool[i];
+                        for (int j = 0; j < 2; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                return players;
+                            }
+                        }
+                    }
+                    return null;
+                case 1:
+                    for (int i = 0; i < multiPool.Count; i++)
+                    {
+                        List<MatchDTO> players = multiPool[i];
+                        for (int j = 0; j < 6; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                return players;
+                            }
+                        }
+                    }
+                    return null;
+                default:
+                    return null;
+            }
+        }
+        public void DestroyCompose(int accountId ,int model)
+        {
+            bool hasGet = false;
+            switch (model)
+            {
+                case 0:
+                    
+                    for (int i = 0; i < singlePool.Count; i++)
+                    {
+                        List<MatchDTO> players = singlePool[i];
+                        for (int j = 0; j < 2; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                hasGet = true;
+                                players.Clear();
+                                break;
+                            }
+                        }
+                        if (hasGet) 
+                        {
+                            singlePool.Remove(players);
+                            break;
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int i = 0; i < multiPool.Count; i++)
+                    {
+                        List<MatchDTO> players = multiPool[i];
+                        for (int j = 0; j < 6; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                hasGet = true;
+                                players.Clear();
+                                break;
+                            }
+                        }
+                        if (hasGet)
+                        {
+                            multiPool.Remove(players);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
         public List<MatchDTO> MatchConfirm(int accountId, int model) 
         {

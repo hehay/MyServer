@@ -47,6 +47,7 @@ namespace MyServer.biz.user
         UserDTO GetUserDtoByToken(UserToken token);
         void GetMatchPlayer(UserToken token, int model,out List<MatchDTO> players,out List<UserToken> tokens);
         void MatchConfirm(UserToken token, int model, out int confirmCount, out List<UserToken> tokens);
+        void MatchResult(UserToken token, int model, out int result, out List<UserToken> tokens);
         void StopMatchPlayer(UserToken token,int model);
     }
 }

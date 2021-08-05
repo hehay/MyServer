@@ -70,6 +70,36 @@ namespace MyServer.biz.user
                 confirmCount = count;
             } 
         }
+        public void MatchResult(UserToken token,int model,out int result, out List<UserToken> tokens)
+        {
+            int accountId = AccountBiz.GetAccountId(token);
+            List<MatchDTO> players = UserCache.GetCompose(accountId,model);
+            if (players != null)
+            {
+                List<UserToken> userTokens = new List<UserToken>();
+                bool allConfirm = true;
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (!players[i].hasConfirm) allConfirm = false;
+                    UserToken userToken = AccountBiz.GetToken(players[i].accountId);
+                    userTokens.Add(userToken);
+                }
+                tokens = userTokens;
+                if (allConfirm) result = 1;
+                else 
+                {
+                    result = 0;
+                    UserCache.DestroyCompose(accountId,model);
+                } 
+            }
+            else 
+            {
+                tokens = null;
+                result = 0;
+            }
+
+
+        }
         public void StopMatchPlayer(UserToken token,int model)
         {
             int accountId = AccountBiz.GetAccountId(token);

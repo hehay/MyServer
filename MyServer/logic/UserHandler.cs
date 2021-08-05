@@ -60,8 +60,22 @@ namespace MyServer.logic
                     model = message.GetMessage<int>();
                     MatchConfirm(token,model);
                     break;
+                case UserProtocol.MatchResult_CREQ:
+                    model = message.GetMessage<int>();
+                    MatchResult(token, model);
+                    break;
+                case UserProtocol.GetHeroList_CREQ:
+                    GetHeroList(token);
+                    break;
             }
 
+        }
+        void GetHeroList(UserToken token) 
+        {
+            ExecutorPool.Instance.Executor(delegate 
+            {
+              
+            });
         }
         void MatchConfirm(UserToken token, int model) 
         {
@@ -73,6 +87,34 @@ namespace MyServer.logic
                 for (int i = 0; i < tokens.Count; i++)
                 {
                     Write(tokens[i], UserProtocol.MatchConfirm_SRES, confirmCount);
+                    switch (model) 
+                    {
+                        case 0:
+                            if (confirmCount == 2) Write(tokens[i], UserProtocol.MatchResult_SRES, 1);
+                            break;
+                        case 1:
+                            if (confirmCount == 6) Write(tokens[i],UserProtocol.MatchResult_SRES,1);
+                            break;
+                        case 2:
+                            if (confirmCount == 10) Write(tokens[i], UserProtocol.MatchResult_SRES, 1);
+                            break;
+                    }
+                }
+            });
+        }
+        void MatchResult(UserToken token, int model) 
+        {
+            ExecutorPool.Instance.Executor(delegate
+            {
+                List<UserToken> tokens = new List<UserToken>();
+                int result = 0;
+                UserBiz.MatchResult(token, model,out result, out tokens);
+                if (tokens != null)
+                {
+                    for (int i = 0; i < tokens.Count; i++)
+                    {
+                        Write(tokens[i], UserProtocol.MatchResult_SRES, result);
+                    }
                 }
             });
         }

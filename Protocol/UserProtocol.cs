@@ -25,5 +25,9 @@ namespace Protocols
         public const int MatchConfirm_SRES = 16;
         public const int StopMatch_CREQ = 17;
         public const int StopMatch_SRES = 18;
+        public const int MatchResult_CREQ = 19;
+        public const int MatchResult_SRES = 20;
+        public const int GetHeroList_CREQ = 21;
+        public const int GetHeroList_SRES=22;
    }
 }

@@ -1,0 +1,16 @@
+<Root>
+  <Hero HeroId="100" HeroName="Ake" 第一职业="刺客" 第二职业="" />
+<Hero HeroId="101" HeroName="Anqila" 第一职业="法师" 第二职业="" />
+<Hero HeroId="102" HeroName="Bianque" 第一职业="法师" 第二职业="辅助" />
+<Hero HeroId="103" HeroName="Caocao" 第一职业="坦克" 第二职业="战士" />
+<Hero HeroId="104" HeroName="Chengyaojin" 第一职业="坦克" 第二职业="战士" />
+<Hero HeroId="105" HeroName="Daji" 第一职业="法师" 第二职业="" />
+<Hero HeroId="106" HeroName="Damo" 第一职业="坦克" 第二职业="战士" />
+<Hero HeroId="107" HeroName="Dianwei" 第一职业="坦克" 第二职业="战士" />
+<Hero HeroId="108" HeroName="Direnjie" 第一职业="射手" 第二职业="" />
+<Hero HeroId="109" HeroName="Houyi" 第一职业="射手" 第二职业="" />
+<Hero HeroId="110" HeroName="Jiangziya" 第一职业="法师" 第二职业="" />
+<Hero HeroId="111" HeroName="Lanlingwang" 第一职业="刺客" 第二职业="" />
+<Hero HeroId="112" HeroName="Liyuanfang" 第一职业="射手" 第二职业="" />
+<Hero HeroId="113" HeroName="Lubanqihao" 第一职业="射手" 第二职业="" />
+</Root>
