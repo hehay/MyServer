@@ -17,7 +17,7 @@ namespace MyServer.cache.user
         //注册就会存在的字典
         public int index = 1;
         public Dictionary<int, List<int>> accIdToRoleListId = new Dictionary<int, List<int>>();
-        public Dictionary<int, USER> idToUser = new Dictionary<int, USER>();
+        public Dictionary<int, USER> accountIdAndUser = new Dictionary<int, USER>();
         public Dictionary<string,USER> nameToUser=new Dictionary<string, USER>(); 
 
        //上线才会存在的字典
@@ -36,6 +36,24 @@ namespace MyServer.cache.user
         {
             _path = path;
             ReadHeroFile();
+            
+            List<MatchDTO> compose = new List<MatchDTO>();
+            MatchDTO matchDto1 = new MatchDTO
+            {
+                accountId = 1,
+                index = 0,
+                hasConfirm = true
+
+            };
+            MatchDTO matchDto2 = new MatchDTO
+            {
+                accountId = 2,
+                index = 1,
+                hasConfirm = true
+            };
+            compose.Add(matchDto1);
+            compose.Add(matchDto2);
+            singlePool.Add(compose);
         }
         public void ReadHeroFile()
         {
@@ -83,6 +101,47 @@ namespace MyServer.cache.user
                 root.AppendChild(hero);
             }
             heroFile.Save(_path);
+        }
+
+        public List<MatchDTO> SelectHero(int accountId, int model, MatchDTO matchDTO) 
+        {
+            switch (model) 
+            {
+                case 0:
+                    for (int i = 0; i < singlePool.Count; i++)
+                    {
+                        List<MatchDTO> players = singlePool[i];
+                        for (int j = 0; j < 2; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == accountId)
+                            {
+                                matchDto.heroId = matchDTO.heroId;
+                                return singlePool[i];
+                            }
+                           
+                        }
+                    }
+                    return null;
+                case 1:
+                    for (int i = 0; i < multiPool.Count; i++)
+                    {
+                        List<MatchDTO> players = multiPool[i];
+                        for (int j = 0; j < 6; j++)
+                        {
+                            MatchDTO matchDto = players[j];
+                            if (matchDto.accountId == 0)
+                            {
+                                matchDto.heroId = matchDTO.heroId;
+                                return singlePool[i];
+                            }
+                        }
+                    }
+                    return null;
+                default:
+                    return null;
+            }
+        
         }
         public List<MatchDTO> GetMatchPlayer(int accountId,int model) 
         {
@@ -361,9 +420,9 @@ namespace MyServer.cache.user
         }
        public USER GetUserById(int id)
         {
-           if (idToUser.ContainsKey(id))
+           if (accountIdAndUser.ContainsKey(id))
            {
-               return idToUser[id];
+               return accountIdAndUser[id];
            }
            return null;
         }
@@ -401,7 +460,7 @@ namespace MyServer.cache.user
             {
                 for (int i = 0; i < roleList.Count; i++)
                 {
-                    userList.Add(idToUser[roleList[i]]);
+                    userList.Add(accountIdAndUser[roleList[i]]);
                 }
                 return userList;
             }
@@ -417,14 +476,36 @@ namespace MyServer.cache.user
         {
             return nameToUser.ContainsKey(name);
         }
+        public void CreateUser(int accountId,string nickname) 
+        {
+            USER user = new USER
+            {
+                
+                AccountId = accountId,
+                Gold = 20000, 
+                Exp = 0,
+                Nickname = nickname,
+                diamond
+            this.map = map;
+            this.attack = attack;
+            this.def = def;
+            this.armour = armour;
+            this.crit = crit;
+            this.exemptCrit = exemptCrit;
+            this.hp = hp;
+            this.maxHp = maxHp;
+            this.mp = mp;
+            this.maxMp = maxMp;
+            this.speed = speed;
+            this.skillPoint = skillPoint;
+            this.propertyPoint = propertyPoint;
+            this.money = money;
+            this.skillids = skillids;
+            this.equips = equips;
+        };
+        }
+        
 
-        /// <summary>
-        /// 添加角色
-        /// </summary>
-        /// <param name="accountId">绑定的账号id</param>
-        /// <param name="name">角色名字</param>
-        /// <param name="modelName">模型名</param>
-        /// <returns></returns>
         public bool AddRole(int accountId,string name, int modelName)
         {
             ModelInitialProperty modelInitialProperty = new ModelInitialProperty();
@@ -434,7 +515,7 @@ namespace MyServer.cache.user
             user.AccountId = accountId;
             user.Exp = 0;
             user.Level = 1;
-            user.Name = name;
+            user.Nickname = name;
             user.ModelName = modelName;
             user.Map = 3;
             user.Attack = modelInitial.attack;
@@ -475,7 +556,7 @@ namespace MyServer.cache.user
                 }
             }
             index++;
-            idToUser.Add(user.Id, user);
+            accountIdAndUser.Add(user.Id, user);
             nameToUser.Add(name,user);
             List<int> roleList;
             accIdToRoleListId.TryGetValue(accountId, out roleList);
@@ -507,7 +588,7 @@ namespace MyServer.cache.user
             accIdToRoleListId.TryGetValue(accountId, out roleList);
             if (roleList != null) roleList.Remove(roleId);
 
-            idToUser.Remove(roleId);
+            accountIdAndUser.Remove(roleId);
             nameToUser.Remove(name);
             return true;
         }
@@ -551,8 +632,8 @@ namespace MyServer.cache.user
 
             IdToToken.Add(userId, token);
             tokenToId.Add(token, userId);
-            accIdToUser.Add(accountId,idToUser[userId]);
-            return idToUser[userId];
+            accIdToUser.Add(accountId,accountIdAndUser[userId]);
+            return accountIdAndUser[userId];
         }
 
         /// <summary>

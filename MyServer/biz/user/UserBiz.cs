@@ -19,6 +19,25 @@ namespace MyServer.biz.user
         public IUserCache UserCache = cacheFactory.UserCache;
         public IAccountBiz AccountBiz = BizFactory.accountBiz;
         public IPosBiz PosBiz = BizFactory.PosBiz;
+
+        public List<UserToken> GetCompose(UserToken token) 
+        {
+            int accountId = AccountBiz.GetAccountId(token);
+            int model = AccountBiz.GetModel(token);
+            List<MatchDTO> matchDTOs= UserCache.GetCompose(accountId,model);
+            List<UserToken> userTokens = new List<UserToken>();
+            for (int i = 0; i < matchDTOs.Count; i++)
+            {
+                MatchDTO matchDTO = matchDTOs[i];
+                UserToken useToken = AccountBiz.GetToken(matchDTO.accountId);
+                userTokens.Add(useToken);
+            }
+            return userTokens;
+        }
+        public void CreateUser(int accountId,string nickname) 
+        {
+            UserCache.CreateUser(accountId,nickname);
+        }
         public int CreatRole(UserToken token,string name,int modelName)
         {
             int accountId = AccountBiz.GetAccountId(token);//获取不到此用户
@@ -46,6 +65,27 @@ namespace MyServer.biz.user
             }
             else tokens = null;
 
+        }
+        public void SelectHero(UserToken token, MatchDTO matchDTO,out List<UserToken> tokens,out List<MatchDTO> matchDTOs) 
+        {
+            int accountId = AccountBiz.GetAccountId(token);
+            int model = AccountBiz.GetModel(token);
+            matchDTOs=UserCache.SelectHero(accountId,model,matchDTO);
+            if (matchDTOs != null)
+            {
+                List<UserToken> userTokens = new List<UserToken>();
+                for (int i = 0; i < matchDTOs.Count; i++)
+                {
+                    UserToken userToken = AccountBiz.GetToken(matchDTOs[i].accountId);
+                    userTokens.Add(userToken);
+                }
+                tokens = userTokens;
+            }
+            else 
+            {
+                tokens = null;
+                Console.WriteLine("获取玩家异常");
+            } 
         }
         public void MatchConfirm(UserToken token, int model, out int confirmCount, out List<UserToken> tokens) 
         {
@@ -167,7 +207,7 @@ namespace MyServer.biz.user
             user.AccountId = userDto.accountId;
             user.Level = userDto.level;
             user.Exp = userDto.exp;
-            user.Name = userDto.name;
+            user.Nickname = userDto.nikename;
             user.ModelName = userDto.modelName;
             user.Map = userDto.map;
             user.Attack = userDto.attack;
@@ -218,7 +258,7 @@ namespace MyServer.biz.user
             userDto.accountId = user.AccountId;
             userDto.level = user.Level;
             userDto.exp = user.Exp;
-            userDto.name = user.Name;
+            userDto.nikename = user.Nickname;
             userDto.modelName = user.ModelName;
             userDto.map = user.Map;
             userDto.attack = user.Attack;

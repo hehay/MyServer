@@ -20,13 +20,13 @@ namespace MyServer.logic
     {
         private IAccountCache accountCache = cacheFactory.AccaountCache;
         private IUserCache userCache = cacheFactory.UserCache;
-        public ConcurrentDictionary<int, MapRoom> mapToRoom = new ConcurrentDictionary<int, MapRoom>();
+        //public ConcurrentDictionary<int, MapRoom> mapToRoom = new ConcurrentDictionary<int, MapRoom>();
         public static MapRoom AllRoom;
         public MapHandler()
         {
             AllRoom=new MapRoom();
-            AllRoom.SetArea(-1);
-            mapToRoom.TryAdd(-1, AllRoom);
+            AllRoom.SetArea(1);
+            /*mapToRoom.TryAdd(1, AllRoom);
 
             MapRoom mapRoom3 = new MapRoom();
             mapRoom3.SetArea(3);
@@ -50,7 +50,7 @@ namespace MyServer.logic
 
              MapRoom mapRoom7 = new MapRoom();
              mapRoom7.SetArea(7);
-             mapToRoom.TryAdd(7, mapRoom7); //地图5
+             mapToRoom.TryAdd(7, mapRoom7); //地图5*/
 
         }
 
@@ -59,14 +59,16 @@ namespace MyServer.logic
             USER user = userCache.GetUserByAccId(accountCache.GetAccountId(token));
             if (user != null)
             {
-                mapToRoom[user.Map].ClientClose(token, error);
-                AllRoom.Leave(token);
+                //mapToRoom[user.Map].ClientClose(token, error);
+                AllRoom.ClientClose(token,error);
+                //AllRoom.Leave(token);
             }
         }
 
         public void MessageReceive(UserToken token, NetFrame.Auto.SocketModel message)
         {
-            mapToRoom[message.area].MessageReceive(token, message);
+            //mapToRoom[message.area].MessageReceive(token, message);
+            AllRoom.MessageReceive(token,message);
         }
 
 

@@ -8,7 +8,7 @@ namespace Protocols.dto
     public  class AbsRoleModel
     {
         public int id;
-        public string name;
+        public string nikename;
         public int modelName;
         public int attack;
         public int def;
@@ -19,6 +19,7 @@ namespace Protocols.dto
         public int maxHp;
         public float speed;
         public int level;
+        public string heroName;
 
     }
 

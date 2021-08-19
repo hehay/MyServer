@@ -63,15 +63,16 @@ namespace MyServer.logic
                     UnUseInventory(token, message.GetMessage<int>());
                     break;
                 case MapProtocol.Talk_CREQ:
-                    Talk(token, message.GetMessage<TalkDTO>());
+                    List<UserToken> userTokens = userBiz.GetCompose(token);
+                    Talk(userTokens, token, message.GetMessage<TalkDTO>());
                     break;
             }
         }
 
-        void Talk(UserToken token, TalkDTO talkDto)
+        void Talk(List<UserToken> userTokens, UserToken token, TalkDTO talkDto)
         {
             talkDto.userid = userCache.GetUserId(token);
-            talkDto.userName = userCache.GetUserById(talkDto.userid).Name;
+            talkDto.userName = userCache.GetUserById(talkDto.userid).Nickname;
             if (talkDto.receiverid >= 0&&talkDto.talkType==TalkType.One)
             {
                 Write(token, MapProtocol.Talk_SRES, talkDto); //发送给自己
@@ -79,7 +80,7 @@ namespace MyServer.logic
             }
             else
             {
-                Brocast(MapProtocol.Talk_BRO,talkDto);
+                Brocast(userTokens, MapProtocol.Talk_BRO,talkDto);
             }
         }
 
@@ -187,8 +188,8 @@ namespace MyServer.logic
                         case InventoryType.Box:
                             break;
                     }
-                
-                    Brocast(MapProtocol.UseInventory_BRO,itemDto);
+                    List<UserToken> tokens = userBiz.GetCompose(token);
+                    Brocast(tokens, MapProtocol.UseInventory_BRO,itemDto);
                 }
             });
         }
@@ -253,8 +254,8 @@ namespace MyServer.logic
                           inventoryBiz.DeleteInventory(token, itemDto.id);
                             break;
                     }
-
-                    Brocast(MapProtocol.UnUseInventory_SRES, itemDto);
+                    List<UserToken> tokens = userBiz.GetCompose(token);
+                    Brocast(tokens, MapProtocol.UnUseInventory_SRES, itemDto);
                 }
             });
 
@@ -266,7 +267,8 @@ namespace MyServer.logic
             int userId = userCache.GetUserId(token);
             attackDto.userId = userId;
             attackDto.targetsId = targetsId;
-            Brocast(MapProtocol.Attack_BRO,attackDto);
+            List<UserToken> tokens = userBiz.GetCompose(token);
+            Brocast(tokens,MapProtocol.Attack_BRO,attackDto);
         }
 
         void Skill(UserToken token, SkillAttackDTO skillAttackDto)
@@ -284,7 +286,8 @@ namespace MyServer.logic
                 if (userDto.mp <= 0) userDto.mp = 0;
                 user.Mp -= skillAttackDto.skillDto.mp;
                 if (user.Mp <= 0) user.Mp = 0;
-                Brocast(MapProtocol.Skill_BRO, skillAttackDto);
+                List<UserToken> tokens = userBiz.GetCompose(token);
+                Brocast(tokens,MapProtocol.Skill_BRO, skillAttackDto);
             }
         }
         int[] inventorys = new[] { 1001, 1002, 1003, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008 };
@@ -292,6 +295,7 @@ namespace MyServer.logic
 
         void Damage(UserToken token, DamageDTO damageDto)
         {
+            List<UserToken> tokens = userBiz.GetCompose(token);
             int userId = userCache.GetUserId(token);
             AbsRoleModel attRoleModel = GetRoleModel(userId);;
             damageDto.userid = userId;
@@ -325,8 +329,9 @@ namespace MyServer.logic
                     talkDto.userid = -1;
                     talkDto.talkType = TalkType.System;
                     talkDto.userName = "系统";
-                    talkDto.text = attRoleModel.name + "杀死了" + targetRoleModel.name+"！"+kill;
-                    Brocast(MapProtocol.Talk_BRO, talkDto);//广播信息
+                    talkDto.text = attRoleModel.nikename + "杀死了" + targetRoleModel.nikename+"！"+kill;
+                    
+                    Brocast(tokens, MapProtocol.Talk_BRO, talkDto);//广播信息
                     UserDTO attUserDto = attRoleModel as UserDTO;
                     USER attUser= userCache.GetUserById(targetRoleModel.id);
 
@@ -354,7 +359,7 @@ namespace MyServer.logic
                             attUserDto.maxMp += attUserDto.level * 25;
                             total_exp = 100 + attUser.Level * 30;
                         }
-                        Brocast(MapProtocol.Killraward_BRO,attUserDto);//广播杀人
+                        Brocast(tokens, MapProtocol.Killraward_BRO,attUserDto);//广播杀人
                     }
                     if (targetRoleModel.id >= 0)
                     {
@@ -368,7 +373,7 @@ namespace MyServer.logic
                             USER user = userCache.GetUserById(targetRoleModel.id);
                             user.Hp = (int)(user.MaxHp * 0.5);
                             user.Mp = (int)(user.MaxMp*0.5);
-                            Brocast(MapProtocol.Revive_BRO,targetRoleModel.id);
+                            Brocast(tokens,MapProtocol.Revive_BRO,targetRoleModel.id);
                         }, 10);//10秒后复活玩家
                     }
                     else
@@ -378,7 +383,7 @@ namespace MyServer.logic
                 }
             }
             damageDto.targets = damages.ToArray();
-            Brocast(MapProtocol.Damage_BRO, damageDto);
+            Brocast(tokens, MapProtocol.Damage_BRO, damageDto);
         }
 
 
@@ -462,36 +467,39 @@ namespace MyServer.logic
         }
         private void EnterMap(UserToken token, UserDTO userDto)
         {
+            List<UserToken> tokens = userBiz.GetCompose(token);
             userDto.map = GetArea();
             USER user = userCache.GetUserById(userDto.id);
             user.Map = GetArea();
             mapModel.Add(userDto.id,userDto);
             models.Add(userDto);
-            base.Enter(token);
-            MapHandler.AllRoom.Enter(token);
+            //base.Enter(token);
+            //MapHandler.AllRoom.Enter(token);
             Write(token, MapProtocol.EnterMap_SRES, models);
-            Brocast(MapProtocol.EnterMap_BRO,userDto,token);
+            Brocast(tokens, MapProtocol.EnterMap_BRO,userDto,token);
         }
 
 
         private void LeaveMap(UserToken token)
         {
-            Leave(token);
+            List<UserToken> tokens = userBiz.GetCompose(token);
+            //Leave(token);
             int id = userCache.GetUserId(token);
             if (mapModel.ContainsKey(id))
             {
                 models.Remove(mapModel[id]);
                 mapModel.Remove(id);             
             }
-            Brocast(MapProtocol.LeaveMap_BRO,id);
+            Brocast(tokens, MapProtocol.LeaveMap_BRO,id);
             Write(token,MapProtocol.LeaveMap_SRES);
         }
 
         private void Move(UserToken token,MoveDto moveDto)
         {
+            List<UserToken> tokens = userBiz.GetCompose(token);
             int id=userCache.GetUserId(token);
             moveDto.userId = id;
-            Brocast(MapProtocol.Move_BRO,moveDto);
+            Brocast(tokens, MapProtocol.Move_BRO,moveDto);
         }
         public override byte GetType()
         {

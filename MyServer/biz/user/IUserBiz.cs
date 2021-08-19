@@ -35,7 +35,7 @@ namespace MyServer.biz.user
         /// <param name="accountId"></param>
         /// <param name="roleId"></param>
         int DelectRole(UserToken token, int roleId,string name);
-
+        void CreateUser(int accountId, string nickname);
         UserDTO OnLine(UserToken token, int userId);
         void OffLine(UserToken token);
         List<UserDTO> GetRoleList(UserToken token);
@@ -49,5 +49,7 @@ namespace MyServer.biz.user
         void MatchConfirm(UserToken token, int model, out int confirmCount, out List<UserToken> tokens);
         void MatchResult(UserToken token, int model, out int result, out List<UserToken> tokens);
         void StopMatchPlayer(UserToken token,int model);
+        void SelectHero(UserToken token, MatchDTO matchDTO, out List<UserToken> tokens, out List<MatchDTO> matchDTOs);
+        List<UserToken> GetCompose(UserToken token);
     }
 }

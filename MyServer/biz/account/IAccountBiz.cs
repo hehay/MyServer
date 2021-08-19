@@ -39,5 +39,7 @@ namespace MyServer.biz.accaount
         /// <returns></returns>
         int GetAccountId(UserToken token);
         UserToken GetToken(int accountId);
+        int GetModel(UserToken token);
+        void SetModel(UserToken token,int model);
     }
 }

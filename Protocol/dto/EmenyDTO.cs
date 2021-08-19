@@ -13,7 +13,7 @@ namespace Protocols.dto
             int crit, int exemptCrit, int hp, int maxHp,  float speed)
         {
             this.id = id;
-            this.name = name;
+            this.nikename = name;
             this.modelName = modelName;
             this.attack = attack;
             this.def = def;

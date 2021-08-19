@@ -14,7 +14,9 @@ namespace MyServer.dao
         private int gold;
         private int level;
         private int exp;
-        private string name;
+        private int diamond;
+        private string nickname;
+         
         private int modelName;
         private int accountId;
         private int map;
@@ -65,12 +67,16 @@ namespace MyServer.dao
             set { accountId = value; }
         }
 
-        public string Name
+        public string Nickname
         {
-            get { return name; }
-            set { name = value; }
+            get { return nickname; }
+            set { nickname = value; }
         }
-
+        public int Diamond 
+        {
+            get { return diamond; }
+            set { diamond = value; }
+        }
         public int Map
         {
             get { return map; }

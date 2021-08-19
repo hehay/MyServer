@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyServer.biz;
+using MyServer.biz.accaount;
 using MyServer.biz.user;
 using MyServer.tool;
 using NetFrame;
@@ -12,10 +13,10 @@ using Protocols.dto;
 
 namespace MyServer.logic
 {
-    public  class UserHandler:AbsOnceHandler,HandlerInterface
+    public  class UserHandler:AbsMulitHandler,HandlerInterface
     {
         public IUserBiz UserBiz=BizFactory.userBiz;
-
+        public IAccountBiz accountBiz = BizFactory.accountBiz;
        
         public void ClientClose(NetFrame.UserToken token, string error)
         {
@@ -29,7 +30,7 @@ namespace MyServer.logic
             {
                 case UserProtocol.CreateRole_CREQ:
                     UserDTO userDto1 = message.GetMessage<UserDTO>();
-                    CreateRole(token, userDto1.name, userDto1.modelName);
+                    CreateRole(token, userDto1.nikename, userDto1.modelName);
                     break;
                 case UserProtocol.OnLine_CREQ:
                     UserDTO userDto2 = message.GetMessage<UserDTO>();
@@ -40,7 +41,7 @@ namespace MyServer.logic
                     break;
                 case UserProtocol.DeleteRole_CREQ:
                     UserDTO userDto3 = message.GetMessage<UserDTO>();
-                    DelectRole(token, userDto3.id, userDto3.name);
+                    DelectRole(token, userDto3.id, userDto3.nikename);
                     break;
                 case UserProtocol.GetRoleList_CREQ:
                     GetRoleList(token);
@@ -67,7 +68,22 @@ namespace MyServer.logic
                 case UserProtocol.GetHeroList_CREQ:
                     GetHeroList(token);
                     break;
+                case UserProtocol.SelectHero_CREQ:
+                    MatchDTO matchDto = message.GetMessage<MatchDTO>();
+                    SelectHero(token,matchDto);
+                    break;
             }
+
+        }
+        void SelectHero(UserToken token,MatchDTO matchDto) 
+        {
+            ExecutorPool.Instance.Executor(delegate
+            {
+                List<UserToken> tokens = new List<UserToken>();
+                List<MatchDTO> matchDTOs = new List<MatchDTO>();
+                UserBiz.SelectHero(token, matchDto, out tokens,out matchDTOs);
+                Brocast(tokens, UserProtocol.SelectHero_BRO, matchDTOs);
+            });
 
         }
         void GetHeroList(UserToken token) 

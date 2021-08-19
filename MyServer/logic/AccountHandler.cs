@@ -40,9 +40,16 @@ namespace MyServer.logic
                 case AccountProtocol.Modify_CREQ:
                     Modify(token,message.GetMessage<ModifyDTO>());
                     break;
+                case AccountProtocol.SetModel_CREQ:
+                    SetModel(token, message.GetMessage<int>());
+                    break;
             }
         }
-
+        public void SetModel(UserToken token,int model) 
+        {
+            accaount.SetModel(token, model);
+             
+        }
 
         void Login(UserToken token, AccountDTO dto)
         {
@@ -79,5 +86,6 @@ namespace MyServer.logic
         {
             return Protocol.Account;
         }
+        
     }
 }

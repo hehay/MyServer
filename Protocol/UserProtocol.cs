@@ -29,5 +29,7 @@ namespace Protocols
         public const int MatchResult_SRES = 20;
         public const int GetHeroList_CREQ = 21;
         public const int GetHeroList_SRES=22;
+        public const int SelectHero_CREQ = 23;
+        public const int SelectHero_BRO = 24;
    }
 }

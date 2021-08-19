@@ -64,6 +64,7 @@ namespace MyServer.cache.user
 
        void OffLine(UserToken token, int accountId);
 
+       void AddUser(int accountId);
        int GetUserId(UserToken token);
        UserToken GeTokenById(int id);
        USER GetUserByToken(UserToken token);
@@ -72,5 +73,6 @@ namespace MyServer.cache.user
         List<MatchDTO> MatchConfirm(int accountId, int model);
         void DestroyCompose(int accountId,int model);
         void StopMatchPlayer(int accountId,int model);
+        List<MatchDTO> SelectHero(int accountId,int model, MatchDTO matchDTO);
    }
 }

@@ -12,6 +12,7 @@ namespace Protocols.dto
         public int accountId;
         public int index;
         public bool hasConfirm;
+        public int heroId;
     }
 
 }

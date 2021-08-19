@@ -17,6 +17,7 @@ namespace MyServer.cache.accaount
         public Dictionary<UserToken,string> OnLineDictionary=new Dictionary<UserToken, string>();
      
         public Dictionary<string,ACCOUNT> NameAndAccount=new Dictionary<string, ACCOUNT>();
+        public Dictionary<UserToken, int> tokenAndModel = new Dictionary<UserToken, int>();
         private XmlDocument accountDoc = new XmlDocument();
         private string _path;
         
@@ -214,6 +215,13 @@ namespace MyServer.cache.accaount
             }
             accountDoc.Save(_path);
         }
-
+        public void SetModel(UserToken token, int model) 
+        {
+            tokenAndModel[token] = model;
+        }
+        public int GetModel(UserToken token)
+        {
+            return tokenAndModel[token];
+        }
     }
 }

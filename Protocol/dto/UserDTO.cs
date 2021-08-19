@@ -11,6 +11,8 @@ namespace Protocols.dto
         public int accountId;
         public int gold;
         public int exp;
+        public int diamond;
+        public int pointTicket;
         public int map;
         public int mp;
         public int maxMp;
@@ -27,7 +29,7 @@ namespace Protocols.dto
             this.gold = gold;
             this.level = level;
             this.exp = exp;
-            this.name = name;
+            this.nikename = name;
             this.modelName = modelName;
             this.map = map;
             this.attack = attack;

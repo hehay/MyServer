@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MyServer.biz.user;
 using MyServer.cache;
 using MyServer.cache.accaount;
 
@@ -11,6 +12,7 @@ namespace MyServer.biz.accaount
     public class AccountBiz:IAccountBiz
     {
         private IAccountCache accountCache = cacheFactory.AccaountCache;
+        private IUserBiz userBiz = BizFactory.userBiz;
         /// <summary>
         /// 创建账号
         /// </summary>
@@ -25,6 +27,8 @@ namespace MyServer.biz.accaount
             if (accountCache.HasAccaount(account)) return -2;//已有此账号
             
             accountCache.CreateAccount(account,password);//先创建账号
+            int accountId = accountCache.GetAccountId(token);
+            userBiz.CreateUser(accountId,account);
             return 1;//创建成功
             
         }
@@ -58,6 +62,14 @@ namespace MyServer.biz.accaount
         public NetFrame.UserToken GetToken(int accountId) 
         {
             return accountCache.GetToken(accountId);
+        }
+        public void SetModel(NetFrame.UserToken token, int model) 
+        {
+            accountCache.SetModel(token,model);
+        }
+        public int GetModel(NetFrame.UserToken token) 
+        {
+            return accountCache.GetModel(token);
         }
     }
 }
